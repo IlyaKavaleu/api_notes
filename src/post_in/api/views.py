@@ -14,6 +14,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser
 from .permissions import IsAuthor_Or_ReadOnly
 from accounts.models import User
+from rest_framework.renderers import JSONRenderer
 
 
 class UserViewList(ListModelMixin, CreateModelMixin, UpdateModelMixin, GenericAPIView):
@@ -44,6 +45,9 @@ class UserViewDetail(RetrieveModelMixin, UpdateModelMixin, GenericAPIView, Destr
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
     def delete(self, request, *args, **kwargs):
         if request.user.admin:
             return self.destroy(request, *args, **kwargs)
@@ -56,11 +60,21 @@ class NoteListView(ListModelMixin, CreateModelMixin, GenericAPIView):
     serializer_class = NoteSerializer
     permission_classes = (IsAuthor_Or_ReadOnly, )
 
+    # def get(self, request, *args, **kwargs):
+    #     notes = self.queryset.filter(author=self.request.user)
+    #     thin_serializer_class = ThinNoteSerializer
+    #     context = {'request': request}
+    #     serializer = thin_serializer_class(notes, many=True, context=context)
+    #     return Response(serializer.data)
+
+    def get_queryset(self):
+        if self.request.user.admin:
+            return self.queryset.all()
+        return self.queryset.filter(author=self.request.user)
+
     def get(self, request, *args, **kwargs):
-        notes = self.queryset.filter(author=self.request.user)
-        thin_serializer_class = ThinNoteSerializer
-        context = {'request': request}
-        serializer = thin_serializer_class(notes, many=True, context=context)
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
@@ -101,8 +115,6 @@ class NoteDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
 #         context = {'request': request}
 #         serializer = ThinNoteSerializer(notes, many=True, context=context)
 #         return Response(serializer.data)
-
-
 
 
 # class NoteListView(ListCreateAPIView):

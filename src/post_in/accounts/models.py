@@ -1,4 +1,4 @@
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, identify_hasher
 from django.db.models import (EmailField, CharField, BooleanField, DateTimeField)
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
@@ -84,8 +84,11 @@ class User(AbstractBaseUser):
         return self.admin
 
     def save(self, *args, **kwargs):
-        print(self.password)
-        if not self.id and not self.staff and not self.admin:
+        """if the password is not hashed, then we hash password it with standart function -- make_password;
+         in the portable case we check its algorithm with function identify_hasher"""
+        try:
+            _alg = identify_hasher(self.password)
+        except ValueError:
             self.password = make_password(self.password)
         super().save(*args, **kwargs)
 

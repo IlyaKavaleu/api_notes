@@ -21,9 +21,9 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('notes/', NoteListView.as_view(), name='notes_list'),
-    path('note_detail/<int:pk>', NoteDetailView.as_view(), name='note_detail'),
+    path('note_detail/<int:pk>/', NoteDetailView.as_view(), name='note_detail'),
     path('users/', UserViewList.as_view(), name='users'),
-    path('user_detail/<int:pk>', UserViewDetail.as_view(), name='user_detail')
+    path('user_detail/<int:pk>/', UserViewDetail.as_view(), name='user_detail')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
