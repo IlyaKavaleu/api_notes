@@ -48,18 +48,20 @@ All actions should be executed from the source directory of the project and only
    
 6. Running ngrok:
     ```bash
-   ngrok http 5000(or your IP address(localhost and etc.))
+    ngrok http 5000(or your IP address(localhost and etc.))
+    ```
    Copy this address:
-    ![ngrok](https://github.com/IlyaKavaleu/api_notes/assets/97099564/f891abb1-8983-4cc1-a144-a254a8aa0ad5)
+   ![ngrok](https://github.com/IlyaKavaleu/api_notes/assets/97099564/f891abb1-8983-4cc1-a144-a254a8aa0ad5)
 
-    Open browser and enter:
-    https://api.telegram.org/bot[YOUR BOT TOKEN]/setWebhook?url=[NGROK ADDRESS]
+   Open browser and enter:
+   ```bash
+   https://api.telegram.org/bot[YOUR BOT TOKEN]/setWebhook?url=[NGROK ADDRESS]
    ```
-    If you see: {"ok":true,"result":true,"description":"Webhook was set"}, you all made good.
-    If {"ok":true,"result":true,"description":"Not found"} and another mistakes, repeat all process!
+   If you see: {"ok":true,"result":true,"description":"Webhook was set"}, you all made good.
+   If {"ok":true,"result":true,"description":"Not found"} and another mistakes, repeat all process!
    
 
-7. Go to the scraping_service application(src/.../scraping_service) and enter:
-  ```bash
+8. Go to the scraping_service application(src/.../scraping_service) and enter:
+   ```bash
    python manage.py runserver
    ```
